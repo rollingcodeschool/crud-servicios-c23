@@ -12,7 +12,7 @@ const Login = () => {
     formState: { errors },
   } = useForm<LoginFormInputs>();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: LoginFormInputs) => {
     console.log(data);
   };
 

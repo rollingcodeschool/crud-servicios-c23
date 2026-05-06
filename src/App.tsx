@@ -7,28 +7,59 @@ import Footer from "./components/shared/Footer";
 import Menu from "./components/shared/Menu";
 import { BrowserRouter, Routes, Route } from "react-router";
 import ProtectorRutas from "./components/routes/ProtectorRutas";
+import { useEffect, useState } from "react";
+import { AppContext } from "./context/AppContext";
 
 function App() {
+  const usuarioSessionStorage = JSON.parse(
+    sessionStorage.getItem("usuarioKey") || "false",
+  );
+  const [usuarioLogueado, setUsuarioLogueado] = useState<boolean>(usuarioSessionStorage);
+
+   useEffect(() => {
+    sessionStorage.setItem("usuarioKey", JSON.stringify(usuarioLogueado));
+  }, [usuarioLogueado]);
+
 
   return (
+    <AppContext.Provider 
+    value={{
+      usuarioLogueado,
+      setUsuarioLogueado
+    }}>
     <BrowserRouter>
       <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col">
         <Menu />
         <main className="container grow mx-auto px-4 py-8">
           <Routes>
-            <Route path="/" element={<Inicio></Inicio>}/>
-            <Route path="/login" element={<Login></Login>}/>
-            <Route path="/administrador" element={<ProtectorRutas/>}>
-              <Route index element={<Administrador/>}/>
-              <Route path="crear" element={<FormularioServicio titulo={'Crear Servicio'}></FormularioServicio>}/>
-              <Route path="editar/:id" element={<FormularioServicio titulo={'Editar Servicio'}></FormularioServicio>}/>
+            <Route path="/" element={<Inicio></Inicio>} />
+            <Route path="/login" element={<Login></Login>} />
+            <Route path="/administrador" element={<ProtectorRutas />}>
+              <Route index element={<Administrador />} />
+              <Route
+                path="crear"
+                element={
+                  <FormularioServicio
+                    titulo={"Crear Servicio"}
+                  ></FormularioServicio>
+                }
+              />
+              <Route
+                path="editar/:id"
+                element={
+                  <FormularioServicio
+                    titulo={"Editar Servicio"}
+                  ></FormularioServicio>
+                }
+              />
             </Route>
-            <Route path="*" element={<Error404></Error404>}/>
+            <Route path="*" element={<Error404></Error404>} />
           </Routes>
         </main>
         <Footer />
       </div>
     </BrowserRouter>
+    </AppContext.Provider>
   );
 }
 
