@@ -1,6 +1,8 @@
+import { useAppContext } from "../../context/AppContext";
 import CardServicio from "../services/CardServicio";
 
 const Inicio = () => {
+  const { servicios } = useAppContext();
   return (
     <section className="space-y-8 animate-fadeIn">
       {/* Encabezado con estilo moderno */}
@@ -15,12 +17,21 @@ const Inicio = () => {
         </div>
 
         <div className="text-xs text-zinc-500 bg-zinc-900 px-3 py-1 rounded-full border border-zinc-800 self-start md:self-center">
-          servicios disponibles
+           {servicios.length} servicios disponibles
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <CardServicio />
-      </div>
+     {servicios.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {servicios.map((servicio) => (
+            <CardServicio key={servicio.id} servicio={servicio} />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center py-20 bg-zinc-900/50 rounded-xl border border-dashed border-zinc-800">
+          <i className="bi bi-search text-4xl text-zinc-700 mb-4"></i>
+          <p className="text-zinc-500">No se encontraron servicios disponibles.</p>
+        </div>
+      )}
     </section>
   );
 };
