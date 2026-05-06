@@ -1,14 +1,16 @@
 import { Link } from "react-router";
 import type { Servicio } from "../../interfaces/servicios";
 import Swal from "sweetalert2";
+import { useAppContext } from "../../context/AppContext";
 
 interface ItemTablaProps {
   servicio: Servicio;
   fila: number;
-   borrarServicio: (id: string) => void;
 }
 
-const ItemTabla = ({servicio, fila, borrarServicio}: ItemTablaProps) => {
+const ItemTabla = ({ servicio, fila }: ItemTablaProps) => {
+  const { borrarServicio } = useAppContext();
+
   const eliminarServicio = () => {
     Swal.fire({
       title: "¿Estás seguro?",
@@ -45,14 +47,20 @@ const ItemTabla = ({servicio, fila, borrarServicio}: ItemTablaProps) => {
         {servicio.nombreServicio}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-zinc-400 font-mono">
-         ${servicio.precio.toLocaleString('es-AR')}
+        ${servicio.precio.toLocaleString("es-AR")}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
         <div className="flex gap-3">
-          <Link to={`/administrador/editar/${servicio.id}`} className="text-amber-500 hover:text-amber-400 transition-colors flex items-center gap-1">
+          <Link
+            to={`/administrador/editar/${servicio.id}`}
+            className="text-amber-500 hover:text-amber-400 transition-colors flex items-center gap-1"
+          >
             <i className="bi bi-pencil-square"></i> Editar
           </Link>
-          <button className="text-red-500 hover:text-red-400 transition-colors flex items-center gap-1" onClick={eliminarServicio}>
+          <button
+            className="text-red-500 hover:text-red-400 transition-colors flex items-center gap-1"
+            onClick={eliminarServicio}
+          >
             <i className="bi bi-trash"></i> Borrar
           </button>
         </div>

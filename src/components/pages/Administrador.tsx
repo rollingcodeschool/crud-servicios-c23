@@ -4,7 +4,7 @@ import { LuCirclePlus } from "react-icons/lu";
 import { useAppContext } from "../../context/AppContext";
 
 const Administrador = () => {
-  const { servicios, borrarServicio } = useAppContext();
+  const { servicios } = useAppContext();
 
   return (
     <section className="animate-fadeIn space-y-6">
@@ -53,7 +53,6 @@ const Administrador = () => {
                   key={servicio.id}
                   servicio={servicio}
                   fila={indice + 1}
-                  borrarServicio={borrarServicio}
                 />
               ))
             ) : (
