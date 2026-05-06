@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import type { Servicio } from "../../interfaces/servicios";
 import Swal from "sweetalert2";
 import { useAppContext } from "../../context/AppContext";
+import { LuTrash2,LuPencil  } from "react-icons/lu";
 
 interface ItemTablaProps {
   servicio: Servicio;
@@ -55,13 +56,13 @@ const ItemTabla = ({ servicio, fila }: ItemTablaProps) => {
             to={`/administrador/editar/${servicio.id}`}
             className="text-amber-500 hover:text-amber-400 transition-colors flex items-center gap-1"
           >
-            <i className="bi bi-pencil-square"></i> Editar
+            <LuPencil /> Editar
           </Link>
           <button
             className="text-red-500 hover:text-red-400 transition-colors flex items-center gap-1"
             onClick={eliminarServicio}
           >
-            <i className="bi bi-trash"></i> Borrar
+            <LuTrash2 /> Borrar
           </button>
         </div>
       </td>
