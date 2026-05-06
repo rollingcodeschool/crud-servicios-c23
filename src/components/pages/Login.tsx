@@ -1,11 +1,16 @@
 import { useForm } from "react-hook-form";
 
+interface LoginFormInputs {
+  email: string;
+  password: string;
+}
+
 const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<LoginFormInputs>();
 
   const onSubmit = (data: any) => {
     console.log(data);
@@ -49,11 +54,9 @@ const Login = () => {
                   },
                 })}
               />
-              {errors.email && (
-                <span className="text-red-500 text-xs mt-1 italic">
-                  {errors.email.message}
-                </span>
-              )}
+              <p className="text-red-500 text-xs mt-1 italic">
+                {errors.email?.message}
+              </p>
             </div>
 
             {/* Password Field */}
@@ -80,11 +83,9 @@ const Login = () => {
                   },
                 })}
               />
-              {errors.password && (
-                <span className="text-red-500 text-xs mt-1 italic">
-                  {errors.password.message}
-                </span>
-              )}
+              <p className="text-red-500 text-xs mt-1 italic">
+                {errors.password?.message}
+              </p>
             </div>
           </div>
 
