@@ -9,7 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import ProtectorRutas from "./components/routes/ProtectorRutas";
 import { useEffect, useState } from "react";
 import { AppContext } from "./context/AppContext";
-import type { Servicio } from "./interfaces/servicios";
+import type { Servicio, ServicioFormData } from "./interfaces/servicios";
 
 function App() {
   const usuarioSessionStorage = JSON.parse(
@@ -30,12 +30,22 @@ function App() {
   }, [servicios]);
 
   // logicar para trabajar con los sercicios
+  const crearServicio = (dataServicio: ServicioFormData) => {
+    const servicioNuevo: Servicio = {
+      ...dataServicio,
+      id: crypto.randomUUID()
+    };
+    setServicios([...servicios, servicioNuevo]);
+  };
+
 
   return (
     <AppContext.Provider 
     value={{
       usuarioLogueado,
-      setUsuarioLogueado
+      setUsuarioLogueado,
+      servicios,
+      crearServicio
     }}>
     <BrowserRouter>
       <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col">
