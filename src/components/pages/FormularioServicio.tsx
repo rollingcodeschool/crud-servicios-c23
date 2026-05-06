@@ -2,7 +2,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import type { ServicioFormData } from "../../interfaces/servicios";
 import { useAppContext } from "../../context/AppContext";
 import Swal from "sweetalert2";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
 
 interface FormularioServicioProps {
@@ -17,11 +17,12 @@ const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
     setValue,
   } = useForm<ServicioFormData>();
   // traigo los datos que necesito del contexto
-  const { crearServicio, buscarServicio } = useAppContext();
+  const { crearServicio, buscarServicio, editarServicio } = useAppContext();
   // traer el id de la ruta
   const { id } = useParams<{ id: string }>();
+  const navegacion = useNavigate();
 
-   useEffect(() => {
+  useEffect(() => {
     if (titulo.includes("Editar") && id && buscarServicio) {
       const servicioBuscado = buscarServicio(id);
       if (servicioBuscado) {
@@ -33,7 +34,6 @@ const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
       }
     }
   }, []);
-  
 
   const onSubmit: SubmitHandler<ServicioFormData> = (data, e) => {
     console.log(data);
@@ -50,8 +50,17 @@ const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
       if (e) {
         (e.target as HTMLFormElement).reset();
       }
-    } else {
-      alert("aqui edito un servicio");
+    } else if (id) {
+      editarServicio(id, data);
+      Swal.fire({
+        title: "Servicio editado",
+        text: `El servicio '${data.nombreServicio}' fue editado correctamente`,
+        icon: "success",
+        background: "#18181b",
+        color: "#f4f4f5",
+        confirmButtonColor: "#3b82f6",
+      });
+      navegacion("/administrador");
     }
   };
 

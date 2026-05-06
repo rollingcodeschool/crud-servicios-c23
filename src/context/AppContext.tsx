@@ -7,7 +7,7 @@ export interface AppContextType {
   servicios: Servicio[];
   crearServicio: (nuevoServicio: ServicioFormData) => void;
   borrarServicio: (idServicio: string) => void;
-  editarServicio: (idServicio: string, servicioEditar: Servicio) => void;
+  editarServicio: (idServicio: string, servicioEditar: ServicioFormData) => void;
   buscarServicio: (idServicio: string) => Servicio | undefined;
 }
 
