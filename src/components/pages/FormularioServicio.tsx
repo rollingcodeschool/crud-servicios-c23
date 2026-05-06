@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import type { ServicioFormData } from "../../interfaces/servicios";
 import { useAppContext } from "../../context/AppContext";
 import Swal from "sweetalert2";
@@ -12,15 +12,14 @@ const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     setValue,
   } = useForm<ServicioFormData>();
   // traigo los datos que necesito del contexto
-   const { crearServicio } = useAppContext();
+  const { crearServicio } = useAppContext();
 
-  const onSubmit = (data: ServicioFormData) => {
+  const onSubmit: SubmitHandler<ServicioFormData> = (data, e) => {
     console.log(data);
-     if (titulo.includes("Crear") && crearServicio) {
+    if (titulo.includes("Crear") && crearServicio) {
       crearServicio(data);
       Swal.fire({
         title: "Servicio creado",
@@ -30,10 +29,12 @@ const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
         color: "#f4f4f5",
         confirmButtonColor: "#3b82f6",
       });
-      reset();
-    } else{
-      alert('aqui edito un servicio')
-    } 
+      if (e) {
+        (e.target as HTMLFormElement).reset();
+      }
+    } else {
+      alert("aqui edito un servicio");
+    }
   };
 
   // Clase utilitaria para inputs
