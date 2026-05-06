@@ -2,6 +2,8 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import type { ServicioFormData } from "../../interfaces/servicios";
 import { useAppContext } from "../../context/AppContext";
 import Swal from "sweetalert2";
+import { useParams } from "react-router";
+import { useEffect } from "react";
 
 interface FormularioServicioProps {
   titulo: string;
@@ -15,7 +17,23 @@ const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
     setValue,
   } = useForm<ServicioFormData>();
   // traigo los datos que necesito del contexto
-  const { crearServicio } = useAppContext();
+  const { crearServicio, buscarServicio } = useAppContext();
+  // traer el id de la ruta
+  const { id } = useParams<{ id: string }>();
+
+   useEffect(() => {
+    if (titulo.includes("Editar") && id && buscarServicio) {
+      const servicioBuscado = buscarServicio(id);
+      if (servicioBuscado) {
+        setValue("nombreServicio", servicioBuscado.nombreServicio);
+        setValue("precio", servicioBuscado.precio);
+        setValue("categoria", servicioBuscado.categoria);
+        setValue("descripcion", servicioBuscado.descripcion);
+        setValue("imagen", servicioBuscado.imagen);
+      }
+    }
+  }, []);
+  
 
   const onSubmit: SubmitHandler<ServicioFormData> = (data, e) => {
     console.log(data);
