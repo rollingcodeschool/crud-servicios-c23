@@ -1,12 +1,41 @@
 import { Link } from "react-router";
 import type { Servicio } from "../../interfaces/servicios";
+import Swal from "sweetalert2";
 
 interface ItemTablaProps {
   servicio: Servicio;
   fila: number;
+   borrarServicio: (id: string) => void;
 }
 
-const ItemTabla = ({servicio, fila}: ItemTablaProps) => {
+const ItemTabla = ({servicio, fila, borrarServicio}: ItemTablaProps) => {
+  const eliminarServicio = () => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No se puede revertir este proceso",
+      icon: "warning",
+      background: "#18181b", // zinc-900
+      color: "#f4f4f5", // zinc-100
+      showCancelButton: true,
+      confirmButtonColor: "#3b82f6", // blue-500
+      cancelButtonColor: "#ef4444", // red-500
+      confirmButtonText: "Sí, borrar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        borrarServicio(servicio.id);
+        Swal.fire({
+          title: "Eliminado",
+          text: `El servicio fue eliminado correctamente`,
+          icon: "success",
+          background: "#18181b",
+          color: "#f4f4f5",
+          confirmButtonColor: "#3b82f6",
+        });
+      }
+    });
+  };
+
   return (
     <tr className="border-b border-zinc-800 hover:bg-zinc-900/50 transition-colors">
       <td className="px-6 py-4 whitespace-nowrap text-sm text-zinc-500 font-mono">
@@ -23,7 +52,7 @@ const ItemTabla = ({servicio, fila}: ItemTablaProps) => {
           <Link to={`/administrador/editar/${servicio.id}`} className="text-amber-500 hover:text-amber-400 transition-colors flex items-center gap-1">
             <i className="bi bi-pencil-square"></i> Editar
           </Link>
-          <button className="text-red-500 hover:text-red-400 transition-colors flex items-center gap-1">
+          <button className="text-red-500 hover:text-red-400 transition-colors flex items-center gap-1" onClick={eliminarServicio}>
             <i className="bi bi-trash"></i> Borrar
           </button>
         </div>
