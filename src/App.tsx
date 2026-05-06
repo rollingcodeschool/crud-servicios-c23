@@ -8,6 +8,7 @@ import Menu from "./components/shared/Menu";
 import { BrowserRouter, Routes, Route } from "react-router";
 
 function App() {
+
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col">
@@ -21,9 +22,6 @@ function App() {
             <Route path="/administrador/editar/:id" element={<FormularioServicio titulo={'Editar Servicio'}></FormularioServicio>}/>
             <Route path="*" element={<Error404></Error404>}/>
           </Routes>
-          {/*  */}
-          {/* <Error404></Error404> */}
-          {/* <Login></Login> */}
         </main>
         <Footer />
       </div>
