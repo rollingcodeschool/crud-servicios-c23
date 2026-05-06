@@ -6,6 +6,7 @@ import Login from "./components/pages/Login";
 import Footer from "./components/shared/Footer";
 import Menu from "./components/shared/Menu";
 import { BrowserRouter, Routes, Route } from "react-router";
+import ProtectorRutas from "./components/routes/ProtectorRutas";
 
 function App() {
 
@@ -17,9 +18,11 @@ function App() {
           <Routes>
             <Route path="/" element={<Inicio></Inicio>}/>
             <Route path="/login" element={<Login></Login>}/>
-            <Route path="/administrador" element={<Administrador></Administrador>}/>
-            <Route path="/administrador/crear" element={<FormularioServicio titulo={'Crear Servicio'}></FormularioServicio>}/>
-            <Route path="/administrador/editar/:id" element={<FormularioServicio titulo={'Editar Servicio'}></FormularioServicio>}/>
+            <Route path="/administrador" element={<ProtectorRutas/>}>
+              <Route index element={<Administrador/>}/>
+              <Route path="crear" element={<FormularioServicio titulo={'Crear Servicio'}></FormularioServicio>}/>
+              <Route path="editar/:id" element={<FormularioServicio titulo={'Editar Servicio'}></FormularioServicio>}/>
+            </Route>
             <Route path="*" element={<Error404></Error404>}/>
           </Routes>
         </main>
