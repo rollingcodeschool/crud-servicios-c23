@@ -1,16 +1,39 @@
 import { useForm } from "react-hook-form";
+import type { ServicioFormData } from "../../interfaces/servicios";
+import { useAppContext } from "../../context/AppContext";
+import Swal from "sweetalert2";
 
-const FormularioServicio = ({ titulo }) => {
+interface FormularioServicioProps {
+  titulo: string;
+}
+
+const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
     setValue,
-  } = useForm();
+  } = useForm<ServicioFormData>();
+  // traigo los datos que necesito del contexto
+   const { crearServicio } = useAppContext();
 
-  const onSubmit = (data: FormInputs) => {
+  const onSubmit = (data: ServicioFormData) => {
     console.log(data);
+     if (titulo.includes("Crear") && crearServicio) {
+      crearServicio(data);
+      Swal.fire({
+        title: "Servicio creado",
+        text: `El servicio '${data.nombreServicio}' fue creado correctamente`,
+        icon: "success",
+        background: "#18181b",
+        color: "#f4f4f5",
+        confirmButtonColor: "#3b82f6",
+      });
+      reset();
+    } else{
+      alert('aqui edito un servicio')
+    } 
   };
 
   // Clase utilitaria para inputs
