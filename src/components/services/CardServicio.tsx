@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import type { Servicio } from "../../interfaces/servicios";
 
 interface CardServicioProps {
@@ -48,9 +49,9 @@ const CardServicio = ({ servicio }: CardServicioProps) => {
               </p>
             </div>
             
-            <button className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors shadow-md shadow-blue-900/20 active:scale-95">
+            <Link to={`servicio/${servicio.id}`} className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors shadow-md shadow-blue-900/20 active:scale-95">
               Ver detalle
-            </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -10,6 +10,7 @@ import ProtectorRutas from "./components/routes/ProtectorRutas";
 import { useEffect, useState } from "react";
 import { AppContext } from "./context/AppContext";
 import type { Servicio, ServicioFormData } from "./interfaces/servicios";
+import DetalleServicio from "./components/pages/DetalleServicio";
 
 function App() {
   const usuarioSessionStorage = JSON.parse(
@@ -84,6 +85,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Inicio></Inicio>} />
               <Route path="/login" element={<Login></Login>} />
+              <Route path="/servicio/:id" element={<DetalleServicio />} />
               <Route path="/administrador" element={<ProtectorRutas />}>
                 <Route index element={<Administrador />} />
                 <Route
