@@ -14,7 +14,7 @@ const DetalleServicio = () => {
     useEffect(() => {
         if (!servicio) {
             // Si no existe el servicio, redirigir a 404
-            navigate("/404");
+             navigate("/404", { replace: true });
         }
     }, [servicio, navigate]);
 
@@ -32,7 +32,7 @@ const DetalleServicio = () => {
                 className="w-full h-64 object-cover rounded mb-4 border border-zinc-700"
             />
             <p className="text-lg mb-2">
-                <span className="font-semibold">Precio:</span> $${servicio.precio.toFixed(2)}
+                <span className="font-semibold">Precio:</span> ${servicio.precio.toLocaleString("es-AR")}
             </p>
             <p className="text-lg mb-2">
                 <span className="font-semibold">Categoría:</span> {servicio.categoria}
