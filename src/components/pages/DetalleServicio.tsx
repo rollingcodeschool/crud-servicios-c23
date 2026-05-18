@@ -9,7 +9,7 @@ const DetalleServicio = () => {
     const navigate = useNavigate();
 
     // Buscar el servicio por id
-    const servicio = id ? buscarServicio(id) : undefined;
+    const servicio = buscarServicio(id || '');
 
     useEffect(() => {
         if (!servicio) {
