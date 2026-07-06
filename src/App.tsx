@@ -62,10 +62,6 @@ function App() {
     setServicios(serviciosEditados);
   };
 
-  const buscarServicio = (idServicio: string): Servicio | undefined => {
-    return servicios.find((item) => item.id === idServicio);
-  };
-
   return (
     <AppContext.Provider
       value={{
@@ -75,7 +71,6 @@ function App() {
         crearServicio,
         borrarServicio,
         editarServicio,
-        buscarServicio
       }}
     >
       <BrowserRouter>

@@ -8,7 +8,6 @@ export interface AppContextType {
   crearServicio: (nuevoServicio: ServicioFormData) => void;
   borrarServicio: (idServicio: string) => void;
   editarServicio: (idServicio: string, servicioEditar: ServicioFormData) => void;
-  buscarServicio: (idServicio: string) => Servicio | undefined;
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);

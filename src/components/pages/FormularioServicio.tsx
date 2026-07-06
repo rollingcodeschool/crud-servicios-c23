@@ -4,6 +4,7 @@ import { useAppContext } from "../../context/AppContext";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
+import { crearServicioApi } from "../../helpers/queries";
 
 interface FormularioServicioProps {
   titulo: string;
@@ -17,7 +18,7 @@ const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
     setValue,
   } = useForm<ServicioFormData>();
   // traigo los datos que necesito del contexto
-  const { crearServicio, buscarServicio, editarServicio } = useAppContext();
+  const { editarServicio } = useAppContext();
   // traer el id de la ruta
   const { id } = useParams<{ id: string }>();
   const navegacion = useNavigate();
@@ -35,18 +36,32 @@ const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
     }
   }, []);
 
-  const onSubmit: SubmitHandler<ServicioFormData> = (data, e) => {
+  const onSubmit: SubmitHandler<ServicioFormData> = async (data, e) => {
     console.log(data);
-    if (titulo.includes("Crear") && crearServicio) {
-      crearServicio(data);
-      Swal.fire({
-        title: "Servicio creado",
-        text: `El servicio '${data.nombreServicio}' fue creado correctamente`,
-        icon: "success",
-        background: "#18181b",
-        color: "#f4f4f5",
-        confirmButtonColor: "#3b82f6",
-      });
+
+    if (titulo.includes("Crear") && crearServicioApi) {
+      //se usa la funcion que crea el servicio
+      const respuesta = await crearServicioApi(data);
+      if(respuesta && respuesta.status === 201){
+        Swal.fire({
+          title: "Servicio creado",
+          text: `El servicio '${data.nombreServicio}' fue creado correctamente`,
+          icon: "success",
+          background: "#18181b",
+          color: "#f4f4f5",
+          confirmButtonColor: "#3b82f6",
+        });
+      }else{
+        // aqui puedo verificar si el status es 400, si lo es puedo usar los mensajes enviados con errores de validacion
+         Swal.fire({
+          title: "Ocurrio un error",
+          text: `El servicio '${data.nombreServicio}' no pudo ser creado`,
+          icon: "success",
+          background: "#18181b",
+          color: "#f4f4f5",
+          confirmButtonColor: "#3b82f6",
+        });
+      }
       if (e) {
         (e.target as HTMLFormElement).reset();
       }

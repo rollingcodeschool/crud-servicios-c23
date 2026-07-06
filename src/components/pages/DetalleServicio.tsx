@@ -5,36 +5,34 @@ import type { Servicio } from "../../interfaces/servicios";
 
 const DetalleServicio = () => {
   const { id } = useParams<{ id: string }>();
-  // const { buscarServicio } = useAppContext();
   const navigate = useNavigate();
- const [servicio, setServicio] = useState<Servicio | null >(null)
- const [cargando, setCargando] = useState<boolean>(true)
+  const [servicio, setServicio] = useState<Servicio | null>(null);
+  const [cargando, setCargando] = useState<boolean>(true);
   // Buscar el servicio por id
-  // const servicio = buscarServicio(id || '');
 
   useEffect(() => {
     obtenerServicio();
   }, []);
 
   const obtenerServicio = async () => {
-    if(!id) return;
-    try{
-        setCargando(true)
-        const respuesta = await buscarServicioApi(id)
-        if(respuesta && respuesta.status === 200){
-            const data = await respuesta.json()
-            setServicio(data)
-        }
-    }catch(error){
-        console.error('error al traer los servicios')
-        navigate('/404', {replace: true })
-    }finally{
-        setCargando(false)
+    if (!id) return;
+    try {
+      setCargando(true);
+      const respuesta = await buscarServicioApi(id);
+      if (respuesta && respuesta.status === 200) {
+        const data = await respuesta.json();
+        setServicio(data);
+      }
+    } catch (error) {
+      console.error("error al traer los servicios");
+      navigate("/404", { replace: true });
+    } finally {
+      setCargando(false);
     }
   };
 
-  if(!servicio){
-    return null
+  if (!servicio) {
+    return null;
   }
 
   return (
