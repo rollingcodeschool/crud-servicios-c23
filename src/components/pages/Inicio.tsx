@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import CardServicio from "../services/CardServicio";
 import type { Servicio } from "../../interfaces/servicios";
 import { listarServiciosApi } from "../../helpers/queries";
+import Swal from "sweetalert2";
 
 const Inicio = () => {
   // const { servicios } = useAppContext();
@@ -15,6 +16,17 @@ const Inicio = () => {
   const cargarServicios= async()=>{
     const respuestaServicio =  await listarServiciosApi()
     console.log(respuestaServicio)
+    if(respuestaServicio && respuestaServicio.status === 200){
+      const data = await respuestaServicio.json()
+      console.log(data)
+      setServicios(data)
+    }else{
+       Swal.fire({
+             title: "Ocurrio un error",
+             text: `No se puede mostrar los servicios en este momento`,
+             icon: "success"
+           });
+    }
   }
 
   return (
@@ -37,7 +49,7 @@ const Inicio = () => {
      {servicios.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {servicios.map((servicio) => (
-            <CardServicio key={servicio.id} servicio={servicio} />
+            <CardServicio key={servicio._id} servicio={servicio} />
           ))}
         </div>
       ) : (
