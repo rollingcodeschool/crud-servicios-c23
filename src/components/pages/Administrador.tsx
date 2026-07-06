@@ -1,10 +1,31 @@
 import { Link } from "react-router";
 import ItemTabla from "../services/ItemTabla";
 import { LuCirclePlus } from "react-icons/lu";
-import { useAppContext } from "../../context/AppContext";
+import type { Servicio } from "../../interfaces/servicios";
+import { useState, useEffect } from "react";
+import { listarServiciosApi } from "../../helpers/queries";
+import Swal from "sweetalert2";
 
 const Administrador = () => {
-  const { servicios } = useAppContext();
+  const [servicios, setServicios] = useState<Servicio[]>([])
+
+    useEffect(()=>{
+    cargarServicios()
+  }, [])
+
+    const cargarServicios= async()=>{
+      const respuestaServicio =  await listarServiciosApi()
+      if(respuestaServicio && respuestaServicio.status === 200){
+        const data = await respuestaServicio.json()
+        setServicios(data)
+      }else{
+         Swal.fire({
+               title: "Ocurrio un error",
+               text: `No se puede mostrar los servicios en este momento`,
+               icon: "success"
+             });
+      }
+    }
 
   return (
     <section className="animate-fadeIn space-y-6">
@@ -50,7 +71,7 @@ const Administrador = () => {
             {servicios.length > 0 ? (
               servicios.map((servicio, indice) => (
                 <ItemTabla
-                  key={servicio.id}
+                  key={servicio._id}
                   servicio={servicio}
                   fila={indice + 1}
                 />
