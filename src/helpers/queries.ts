@@ -37,3 +37,29 @@ export const crearServicioApi = async (servicio: Servicio):Promise<Response> =>{
         throw error
     }
 };
+export const editarServicioApi = async (id:string, servicio: Servicio):Promise<Response> =>{
+    try{
+        const respuesta = await fetch(`${urlServicios}/${id}`, {
+            method: 'PUT',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(servicio)
+        })
+        return respuesta
+    }catch(error){
+        console.error(error)
+        throw error
+    }
+};
+export const borrarServicioApi = async (id:string):Promise<Response> =>{
+    try{
+        const respuesta = await fetch(`${urlServicios}/${id}`, {
+            method: 'DELETE'
+        })
+        return respuesta
+    }catch(error){
+        console.error(error)
+        throw error
+    }
+};

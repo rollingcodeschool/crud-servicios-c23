@@ -1,10 +1,13 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import type { ServicioFormData } from "../../interfaces/servicios";
-import { useAppContext } from "../../context/AppContext";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
-import { crearServicioApi } from "../../helpers/queries";
+import {
+  buscarServicioApi,
+  crearServicioApi,
+  editarServicioApi,
+} from "../../helpers/queries";
 
 interface FormularioServicioProps {
   titulo: string;
@@ -17,24 +20,30 @@ const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
     formState: { errors },
     setValue,
   } = useForm<ServicioFormData>();
-  // traigo los datos que necesito del contexto
-  const { editarServicio } = useAppContext();
+
   // traer el id de la ruta
   const { id } = useParams<{ id: string }>();
   const navegacion = useNavigate();
 
   useEffect(() => {
-    if (titulo.includes("Editar") && id && buscarServicio) {
-      const servicioBuscado = buscarServicio(id);
-      if (servicioBuscado) {
-        setValue("nombreServicio", servicioBuscado.nombreServicio);
-        setValue("precio", servicioBuscado.precio);
-        setValue("categoria", servicioBuscado.categoria);
-        setValue("descripcion", servicioBuscado.descripcion);
-        setValue("imagen", servicioBuscado.imagen);
+    obtenerServicio();
+  }, []);
+
+  const obtenerServicio = async () => {
+    if (titulo.includes("Editar") && id && buscarServicioApi) {
+      const respuesta = await buscarServicioApi(id);
+      if (respuesta && respuesta.status === 200) {
+        const servicioBuscado = await respuesta.json();
+        if (servicioBuscado) {
+          setValue("nombreServicio", servicioBuscado.nombreServicio);
+          setValue("precio", servicioBuscado.precio);
+          setValue("categoria", servicioBuscado.categoria);
+          setValue("descripcion", servicioBuscado.descripcion);
+          setValue("imagen", servicioBuscado.imagen);
+        }
       }
     }
-  }, []);
+  };
 
   const onSubmit: SubmitHandler<ServicioFormData> = async (data, e) => {
     console.log(data);
@@ -42,7 +51,7 @@ const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
     if (titulo.includes("Crear") && crearServicioApi) {
       //se usa la funcion que crea el servicio
       const respuesta = await crearServicioApi(data);
-      if(respuesta && respuesta.status === 201){
+      if (respuesta && respuesta.status === 201) {
         Swal.fire({
           title: "Servicio creado",
           text: `El servicio '${data.nombreServicio}' fue creado correctamente`,
@@ -51,9 +60,9 @@ const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
           color: "#f4f4f5",
           confirmButtonColor: "#3b82f6",
         });
-      }else{
+      } else {
         // aqui puedo verificar si el status es 400, si lo es puedo usar los mensajes enviados con errores de validacion
-         Swal.fire({
+        Swal.fire({
           title: "Ocurrio un error",
           text: `El servicio '${data.nombreServicio}' no pudo ser creado`,
           icon: "success",
@@ -66,16 +75,28 @@ const FormularioServicio = ({ titulo }: FormularioServicioProps) => {
         (e.target as HTMLFormElement).reset();
       }
     } else if (id) {
-      editarServicio(id, data);
-      Swal.fire({
-        title: "Servicio editado",
-        text: `El servicio '${data.nombreServicio}' fue editado correctamente`,
-        icon: "success",
-        background: "#18181b",
-        color: "#f4f4f5",
-        confirmButtonColor: "#3b82f6",
-      });
-      navegacion("/administrador");
+      //aqui edito el servicio
+      const respuesta = await editarServicioApi(id, data);
+      if (respuesta && respuesta.status === 200) {
+        Swal.fire({
+          title: "Servicio editado",
+          text: `El servicio '${data.nombreServicio}' fue editado correctamente`,
+          icon: "success",
+          background: "#18181b",
+          color: "#f4f4f5",
+          confirmButtonColor: "#3b82f6",
+        });
+        navegacion("/administrador");
+      }else{
+         Swal.fire({
+          title: "Ocurrio un error",
+          text: `El servicio '${data.nombreServicio}' no pudo ser editado`,
+          icon: "error",
+          background: "#18181b",
+          color: "#f4f4f5",
+          confirmButtonColor: "#3b82f6",
+        });
+      }
     }
   };
 

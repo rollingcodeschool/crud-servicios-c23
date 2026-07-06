@@ -53,7 +53,7 @@ const ItemTabla = ({ servicio, fila }: ItemTablaProps) => {
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
         <div className="flex gap-3">
           <Link
-            to={`/administrador/editar/${servicio.id}`}
+            to={`/administrador/editar/${servicio._id}`}
             className="text-amber-500 hover:text-amber-400 transition-colors flex items-center gap-1"
           >
             <LuPencil /> Editar
