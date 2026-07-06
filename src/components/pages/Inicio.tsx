@@ -15,10 +15,8 @@ const Inicio = () => {
 
   const cargarServicios= async()=>{
     const respuestaServicio =  await listarServiciosApi()
-    console.log(respuestaServicio)
     if(respuestaServicio && respuestaServicio.status === 200){
       const data = await respuestaServicio.json()
-      console.log(data)
       setServicios(data)
     }else{
        Swal.fire({
