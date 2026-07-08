@@ -7,7 +7,7 @@ const DetalleServicio = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [servicio, setServicio] = useState<Servicio | null>(null);
-  const [cargando, setCargando] = useState<boolean>(true);
+  // const [cargando, setCargando] = useState<boolean>(true);
   // Buscar el servicio por id
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const DetalleServicio = () => {
   const obtenerServicio = async () => {
     if (!id) return;
     try {
-      setCargando(true);
+      // setCargando(true);
       const respuesta = await buscarServicioApi(id);
       if (respuesta && respuesta.status === 200) {
         const data = await respuesta.json();
@@ -26,9 +26,10 @@ const DetalleServicio = () => {
     } catch (error) {
       console.error("error al traer los servicios");
       navigate("/404", { replace: true });
-    } finally {
-      setCargando(false);
-    }
+    } 
+    // finally {
+    //   setCargando(false);
+    // }
   };
 
   if (!servicio) {
