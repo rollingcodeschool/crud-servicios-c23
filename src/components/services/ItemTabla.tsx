@@ -3,15 +3,16 @@ import type { Servicio } from "../../interfaces/servicios";
 import Swal from "sweetalert2";
 import { useAppContext } from "../../context/AppContext";
 import { LuTrash2,LuPencil  } from "react-icons/lu";
+import { borrarServicioApi } from "../../helpers/queries";
 
 interface ItemTablaProps {
   servicio: Servicio;
   fila: number;
+  setServicios: React.Dispatch<React.SetStateAction<Servicio[]>>
 }
 
-const ItemTabla = ({ servicio, fila }: ItemTablaProps) => {
-  const { borrarServicio } = useAppContext();
-
+const ItemTabla = ({ servicio, fila, setServicios }: ItemTablaProps) => {
+ 
   const eliminarServicio = () => {
     Swal.fire({
       title: "¿Estás seguro?",
@@ -24,17 +25,30 @@ const ItemTabla = ({ servicio, fila }: ItemTablaProps) => {
       cancelButtonColor: "#ef4444", // red-500
       confirmButtonText: "Sí, borrar",
       cancelButtonText: "Cancelar",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        borrarServicio(servicio.id);
-        Swal.fire({
-          title: "Eliminado",
-          text: `El servicio fue eliminado correctamente`,
-          icon: "success",
-          background: "#18181b",
-          color: "#f4f4f5",
-          confirmButtonColor: "#3b82f6",
-        });
+        const respuesta = await borrarServicioApi(servicio._id);
+        if(respuesta && respuesta.status === 200){
+          //actualiazar la tabla de servicios
+          setServicios((prevServicios)=> prevServicios.filter((item)=> item._id !== servicio._id))
+          Swal.fire({
+            title: "Eliminado",
+            text: `El servicio fue eliminado correctamente`,
+            icon: "success",
+            background: "#18181b",
+            color: "#f4f4f5",
+            confirmButtonColor: "#3b82f6",
+          });
+        }else{
+          Swal.fire({
+            title: "Ocurrio un error",
+            text: `El servicio no pudo ser eliminado, intentenlo en unos minutos.`,
+            icon: "error",
+            background: "#18181b",
+            color: "#f4f4f5",
+            confirmButtonColor: "#3b82f6",
+          });
+        }
       }
     });
   };
